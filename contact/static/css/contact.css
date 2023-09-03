@@ -1,0 +1,9 @@
+.input-group-append {
+    cursor: pointer;
+}
+.navbar-custom {
+  background-color: #007BFF;
+}
+.navbar-custom .nav-link {
+  color: #fff; 
+}

@@ -1,0 +1,13 @@
+{% load static %}
+{% include 'header.html' %}
+<body>
+    <h2 class="text-center">Editar contacto</h2>
+
+    <section class="container">
+        {% include 'formContact.html' %}
+    </section>
+
+    <script>var contactId = {{ contact_id }};</script>
+    <script src="{% static 'js/contactDetail.js' %}"></script>
+</body>
+</html>
