@@ -18,7 +18,6 @@ Asegúrate de tener instalados los siguientes componentes en tu máquina:
 
 ```bash
 git clone https://github.com/helmuntv/contact525.git
-cd contact
 ```
 ### Configuración del entorno virtual
 
