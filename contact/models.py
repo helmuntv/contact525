@@ -1,7 +1,5 @@
 from django.db import models
 from utils.models import Country, City, State, GenderType
-from django.core.exceptions import ValidationError
-import os
 
 
 class Contact(models.Model):

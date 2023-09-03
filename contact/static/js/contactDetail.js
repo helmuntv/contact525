@@ -8,6 +8,7 @@ function displayErrors(errors) {
     $("#errorModal").modal("show");
 }
 
+//funcion para obtener los genderType y seleccionarlo de acuerdo con el parametro recibido
 function getGenderTypes(genderId) {
     $.ajax({
         url: "/api/gendertypes",
@@ -15,9 +16,8 @@ function getGenderTypes(genderId) {
         dataType: "json",
         headers: { Accept: "application/json" },
         success: function (data) {
-            // Llenar el selector 'gender' con las opciones
             var genderSelector = $("#gender");
-            genderSelector.empty(); // Limpiar opciones actuales
+            genderSelector.empty();
             $.each(data, function (index, gender) {
                 genderSelector.append(new Option(gender.name, gender.id));
             });
@@ -29,6 +29,7 @@ function getGenderTypes(genderId) {
     });
 }
 
+//funcion para obtener los country y seleccionarlo de acuerdo con el parametro recibido
 function getCountries(countryId) {
     $.ajax({
         url: "/api/countries",
@@ -36,9 +37,8 @@ function getCountries(countryId) {
         dataType: "json",
         headers: { Accept: "application/json" },
         success: function (data) {
-            // Llenar el selector 'country' con las opciones
             var countrySelector = $("#country");
-            countrySelector.empty(); // Limpiar opciones actuales
+            countrySelector.empty();
             $.each(data, function (index, country) {
                 countrySelector.append(new Option(country.name, country.id));
             });
@@ -50,6 +50,7 @@ function getCountries(countryId) {
     });
 }
 
+//funcion para obtener los state y seleccionarlo de acuerdo con los parametros recibidos
 function getStates(countryId, stateId) {
     $.ajax({
         url: "/api/states?country_id=" + countryId,
@@ -57,7 +58,6 @@ function getStates(countryId, stateId) {
         dataType: "json",
         headers: { Accept: "application/json" },
         success: function (data) {
-            // Llenar el selector 'state' con las opciones
             var stateSelector = $("#state");
             stateSelector.empty();
             $.each(data, function (index, state) {
@@ -72,6 +72,7 @@ function getStates(countryId, stateId) {
     });
 }
 
+//funcion para obtener los city y seleccionarlo de acuerdo con los parametros recibidos
 function getCities(stateId, cityId) {
     $.ajax({
         url: "/api/cities?state_id=" + stateId,
@@ -79,9 +80,8 @@ function getCities(stateId, cityId) {
         dataType: "json",
         headers: { Accept: "application/json" },
         success: function (data) {
-            // Llenar el selector 'city' con las opciones
             var citySelector = $("#city");
-            citySelector.empty(); // Limpiar opciones actuales
+            citySelector.empty();
             $.each(data, function (index, city) {
                 citySelector.append(new Option(city.name, city.id));
             });
@@ -93,11 +93,12 @@ function getCities(stateId, cityId) {
     });
 }
 
+//Funcion para cargar los select de Gendertypes, Countries, States y Cities
 function loadSelectData(selectId, url, placeholder, requestData) {
     $.ajax({
         url: url,
         method: "GET",
-        data: requestData, // Aquí se agregan los datos adicionales
+        data: requestData,
         dataType: "json",
         headers: { Accept: "application/json" },
         success: function (data) {
@@ -119,14 +120,13 @@ $(document).ready(function () {
         format: 'yyyy-mm-dd'
     });
 
-    // Realiza una solicitud AJAX para obtener los detalles del contacto
+    // obtener el detalle del contacto
     $.ajax({
         url: "/api/contacts/" + contactId,
         method: "GET",
         dataType: "json",
         headers: { Accept: "application/json" },
         success: function (data) {
-            // Aquí puedes manejar los datos del contacto y mostrarlos en tu página
             $("#state").prop("disabled", false);
             $("#city").prop("disabled", false);
 
@@ -135,7 +135,6 @@ $(document).ready(function () {
             getStates(data.country.id, data.state.id);
             getCities(data.state.id, data.city.id);
 
-            // Resto de los campos
             $("#birthdate").val(data.birthdate);
             $("#first_name").val(data.first_name);
             $("#last_name").val(data.last_name);
@@ -150,12 +149,10 @@ $(document).ready(function () {
     });
 
     $("#country").change(function () {
-        // Obtén el valor seleccionado del país
         var selectedCountry = $(this).val();
 
         if (selectedCountry) {
             $("#state").prop("disabled", false);
-            // Realiza una solicitud AJAX para obtener los estados por país
             loadSelectData("state", "/api/states/", "Departamento", { country_id: selectedCountry });
             $("#city").prop("disabled", true);
         } else {
@@ -164,26 +161,22 @@ $(document).ready(function () {
         }
     });
 
-    // Cuando cambia la selección del estado
     $("#state").change(function () {
-        // Obtén el valor seleccionado del estado
         var selectedState = $(this).val();
 
         if (selectedState) {
             $("#city").prop("disabled", false);
-            // Realiza una solicitud AJAX para obtener las ciudades por estado
             loadSelectData("city", "/api/cities/", "Ciudad", { state_id: selectedState });
         } else {
             $("#city").prop("disabled", true);
         }
     });
 
-    // Escucha el evento submit del formulario
     $("form").submit(function (event) {
-        event.preventDefault(); // Evita que el formulario se envíe normalmente
+        event.preventDefault();
 
         var csrfToken = $("input[name='csrfmiddlewaretoken']").val();
-        // Captura los valores de los campos del formulario
+        
         var formData = {
             gender: parseInt($("#gender").val()),
             birthdate: $("#birthdate").val(),
@@ -198,18 +191,15 @@ $(document).ready(function () {
             comment: $("#comment").val()
         };
 
-        // Realiza una solicitud AJAX POST con los datos recopilados
         $.ajax({
             url: "/api/contacts/" + contactId + "/",
             method: "PUT",
             data: JSON.stringify(formData),
             headers: { Accept: "application/json", "X-CSRFToken": csrfToken, "Content-Type": "application/json" },
             success: function (response) {
-                // Maneja la respuesta del servidor si es necesario
                 $("#successModal").modal("show");
 
                 $("#successModal").on("hidden.bs.modal", function () {
-                    // Redirigir a contactList.html
                     window.location.href = "http://localhost:8000/contactList";
                 });
             },

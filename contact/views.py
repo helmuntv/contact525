@@ -43,15 +43,12 @@ class ContactListCreateView(APIView):
         contacts = Contact.objects.filter(active=True)
         serializer = ContactGetSerializer(contacts, many=True)
         
-        # Crear un diccionario para almacenar el conteo de registros por ciudad
         city_counts = {}
         
-        # Contar registros por ciudad
         for contact_data in serializer.data:
             city_name = contact_data['city']['name']
             city_counts[city_name] = city_counts.get(city_name, 0) + 1
         
-        # Agregar el conteo de registros por ciudad a la respuesta
         response_data = {
             'contacts': serializer.data,
             'city_counts': city_counts,

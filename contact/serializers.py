@@ -41,9 +41,8 @@ class ContactSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"city": "The city does not correspond to the specified state."})
         
 
-        # Validación personalizada para el límite de registros por ciudad
         existing_contacts = Contact.objects.filter(city=city, active=True)
-        if self.instance:  # Si estamos actualizando un registro existente
+        if self.instance:
             existing_contacts = existing_contacts.exclude(pk=self.instance.pk)
         if existing_contacts.count() >= int(os.getenv("MAX_CONTACTS_PER_CITY")):
             raise serializers.ValidationError({"city": f"There are already {os.getenv('MAX_CONTACTS_PER_CITY')} records for this city. No more are allowed."})
