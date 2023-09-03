@@ -8,11 +8,12 @@ function displayErrors(errors) {
   $("#errorModal").modal("show");
 }
 
+//Funcion para cargar los select de Gendertypes, Countries, States y Cities
 function loadSelectData(selectId, url, placeholder, requestData) {
   $.ajax({
     url: url,
     method: "GET",
-    data: requestData, // Aquí se agregan los datos adicionales
+    data: requestData,
     dataType: "json",
     headers: { Accept: "application/json" },
     success: function (data) {
@@ -39,11 +40,9 @@ $(document).ready(function () {
 
 
   $("#country").change(function () {
-    // Obtén el valor seleccionado del país
     var selectedCountry = $(this).val();
     if (selectedCountry) {
       $("#state").prop("disabled", false);
-      // Realiza una solicitud AJAX para obtener los estados por país
       loadSelectData("state", "/api/states/", "Departamento", { country_id: selectedCountry })
     } else {
       $("#state").prop("disabled", true);
@@ -51,26 +50,21 @@ $(document).ready(function () {
     }
   });
 
-  // Cuando cambia la selección del estado
   $("#state").change(function () {
-    // Obtén el valor seleccionado del estado
     var selectedState = $(this).val();
-
     if (selectedState) {
       $("#city").prop("disabled", false);
-      // Realiza una solicitud AJAX para obtener las ciudades por estado
       loadSelectData("city", "/api/cities/", "Ciudad", { state_id: selectedState });
     } else {
       $("#city").prop("disabled", true);
     }
   });
 
-  // Escucha el evento submit del formulario
   $("form").submit(function (event) {
-    event.preventDefault(); // Evita que el formulario se envíe normalmente
+    event.preventDefault();
 
     var csrfToken = $("input[name='csrfmiddlewaretoken']").val();
-    // Captura los valores de los campos del formulario
+    
     var formData = {
       gender: parseInt($("#gender").val()),
       birthdate: $("#birthdate").val(),
@@ -85,14 +79,12 @@ $(document).ready(function () {
       comment: $("#comment").val()
     };
 
-    // Realiza una solicitud AJAX POST con los datos recopilados
     $.ajax({
       url: "/api/contacts/",
       method: "POST",
       data: JSON.stringify(formData),
       headers: { Accept: "application/json", "X-CSRFToken": csrfToken, "Content-Type": "application/json" },
       success: function (response) {
-        // Maneja la respuesta del servidor si es necesario
         $("#successModal").modal("show");
 
         $("form")[0].reset();

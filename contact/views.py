@@ -43,15 +43,12 @@ class ContactListCreateView(APIView):
         contacts = Contact.objects.filter(active=True)
         serializer = ContactGetSerializer(contacts, many=True)
         
-        # Crear un diccionario para almacenar el conteo de registros por ciudad
         city_counts = {}
         
-        # Contar registros por ciudad
         for contact_data in serializer.data:
             city_name = contact_data['city']['name']
             city_counts[city_name] = city_counts.get(city_name, 0) + 1
         
-        # Agregar el conteo de registros por ciudad a la respuesta
         response_data = {
             'contacts': serializer.data,
             'city_counts': city_counts,
@@ -59,7 +56,7 @@ class ContactListCreateView(APIView):
         
         return Response(response_data, status=status.HTTP_200_OK)
 
-
+    @swagger_auto_schema(request_body=ContactSerializer) 
     def post(self, request):
         serializer = ContactSerializer(data=request.data)
         if serializer.is_valid():
@@ -74,7 +71,7 @@ class ContactDetailView(APIView):
         serializer = ContactGetSerializer(contact)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
+    @swagger_auto_schema(request_body=ContactSerializer) 
     def put(self, request, pk):
         contact = get_object_or_404(Contact, pk=pk)
         serializer = ContactSerializer(contact, data=request.data)
@@ -83,7 +80,7 @@ class ContactDetailView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+    @swagger_auto_schema(request_body=ContactSerializer)
     def delete(self, request, pk):
         contact = get_object_or_404(Contact, pk=pk)
         contact.active = False
