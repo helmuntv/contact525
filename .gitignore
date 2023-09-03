@@ -3,3 +3,5 @@
 /static
 /static/
 __pycache__/
+venv/
+env/

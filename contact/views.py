@@ -56,7 +56,7 @@ class ContactListCreateView(APIView):
         
         return Response(response_data, status=status.HTTP_200_OK)
 
-
+    @swagger_auto_schema(request_body=ContactSerializer) 
     def post(self, request):
         serializer = ContactSerializer(data=request.data)
         if serializer.is_valid():
@@ -71,7 +71,7 @@ class ContactDetailView(APIView):
         serializer = ContactGetSerializer(contact)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
+    @swagger_auto_schema(request_body=ContactSerializer) 
     def put(self, request, pk):
         contact = get_object_or_404(Contact, pk=pk)
         serializer = ContactSerializer(contact, data=request.data)
@@ -80,7 +80,7 @@ class ContactDetailView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+    @swagger_auto_schema(request_body=ContactSerializer)
     def delete(self, request, pk):
         contact = get_object_or_404(Contact, pk=pk)
         contact.active = False

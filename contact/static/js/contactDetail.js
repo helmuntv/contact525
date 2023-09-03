@@ -200,7 +200,7 @@ $(document).ready(function () {
                 $("#successModal").modal("show");
 
                 $("#successModal").on("hidden.bs.modal", function () {
-                    window.location.href = "http://localhost:8000/contactList";
+                    window.location.href = "/contactList";
                 });
             },
             error: function (xhr, status, error) {

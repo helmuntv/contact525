@@ -59,7 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'server.middlewares.JSONMiddleware.ValidateJSONAcceptHeaderMiddleware'
+    'server.middlewares.JSONMiddleware.ValidateJSONAcceptHeaderMiddleware'
 ]
 
 ROOT_URLCONF = 'server.urls'
