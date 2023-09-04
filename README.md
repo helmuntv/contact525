@@ -63,6 +63,12 @@ DB_PORT=3306
 ```bash
 python manage.py migrate
 ```
+### Ejecutar pruebas unitarias
+
+```bash
+pytest
+```
+
 ### Ejecutar el servidor
 
 Inicia el servidor de desarrollo de Django:

@@ -41,8 +41,8 @@ urlpatterns = [
 
     #pages
     path('contact', ContactView.as_view(), name='index'),
-    path('contactList', ContactListView.as_view(), name='contact-list'),
-    path('contactDetail/<int:contact_id>/', ContactEditView.as_view(), name='contact-detail'),
+    path('contactList', ContactListView.as_view(), name='contactList'),
+    path('contactDetail/<int:contact_id>/', ContactEditView.as_view(), name='contactDetail'),
     
     #admin
     path('admin/', admin.site.urls),
